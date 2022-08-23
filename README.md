@@ -1,16 +1,14 @@
 # Snake
-My first Rust project!
----
-It's a snake game running in the terminal. Move by typing one of the "wasd" keys and pressing enter. I used Robert Heaton's https://robertheaton.com/2018/12/02/programming-project-5-snake/ for inspiration and guidance.
+###### Snake game running in the terminal. I used Robert Heaton's https://robertheaton.com/2018/12/02/programming-project-5-snake/ for inspiration and guidance.
 ---
 Manual:
 Move with `wasd` followed by `enter` key. 
-Terminate game early with `t` followed by `enter`
+Terminate game early with `t` followed by `enter`.
 
-use command line arguments before running to change board size and edge behaviour
-Formatted like: `[binary] [arg1] [arg2] [arg3]`
-`arg1 and arg2` are board width and height respectively (min 5, max 25 in either direction)
-`arg3` lets you change edge behaviour from "wrapping/teleporting" to being lethal "walls" by inserting `Wall`
+use command line arguments before running to change board size and edge behaviour.  
+Formatted like: `[binary] [arg1] [arg2] [arg3]`  
+`arg1 and arg2` are board width and height respectively (min 5, max 25 in either direction)  
+`arg3` lets you change edge behaviour from "wrapping/teleporting" to being lethal "walls" by inserting `Wall`  
 CLA are only read if you submit two or three args after the executable.
 For any argument that cannot be parsed it will revert to the default value (10*10 board with wrapping)
 
