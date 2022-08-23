@@ -1,4 +1,4 @@
-/* My first Rust project, Getting used to the language and syntax
+/* My first Rust project, for getting used to the language and syntax
  I used https://robertheaton.com/2018/12/02/programming-project-5-snake/ 
  by Robert Heaton for inspiration/guidance. These exercises are fun! */
 
@@ -6,11 +6,16 @@ use std::collections::VecDeque; // Vec Deque lets you pop elements off the vecto
 use std::io;
 use rand::Rng;
 
-// consts used to easily define direction of the snake
+// consts used for the snake direction
 const UP: i32 = 0;
 const RIGHT: i32 = 1;
 const DOWN: i32 = 2;
 const LEFT: i32 = 4;
+// consts used to define board state
+const EMPTY: i32 = 0;
+const HEAD: i32 = 1;
+const TAIL: i32 = 2;
+const APPLE: i32 = 3;
 
 struct Snake {
 	head: (i32, i32, i32), 				// (x coord, y coord, lifetime of tail segments)
@@ -141,24 +146,29 @@ impl Game {
 
 		// did the snake succeed in eating a healthy vegetarian diet?
 		if snake.head.0 == apple.location.0 && snake.head.1 == apple.location.1 {
-			snake.head.2 += 1; // LONGER
+			snake.head.2 += 1; // EXTEND!
 			apple.new_loc(&self);
+			for segment in &mut snake.tail {
+				segment.2 += 1;
+			}
 		}
 
 		// Don't tread on yourself. Doing that ends the game.
-		if self.board[snake.head.0 as usize][snake.head.1 as usize] == 2 {
-			println!("Game over!");
-			std::process::exit(0);
+		for segment in &snake.tail {
+			if snake.head.0 == segment.0 && snake.head.1 == segment.1 {
+				println!("Game over!");
+				std::process::exit(0);
+			}
 		}
 	}
 
 	// Update the board based on snek position
 	pub fn update(&mut self, snake: &Snake, apple: &Apple) {
-		self.board[snake.head.0 as usize][snake.head.1 as usize] = 1;
+		self.board[snake.head.0 as usize][snake.head.1 as usize] = HEAD;
 		for segment in &snake.tail {
-			self.board[segment.0 as usize][segment.1 as usize] = 2;
+			self.board[segment.0 as usize][segment.1 as usize] = TAIL;
 		}
-		self.board[apple.location.0 as usize][apple.location.1 as usize] = 3;
+		self.board[apple.location.0 as usize][apple.location.1 as usize] = APPLE;
 	}
 
 	// Render the board
@@ -170,13 +180,13 @@ impl Game {
 				if x == -1 || x == self.width || y == -1 || y == self.height {
 					print!("■");
 				} else {
-					if self.board[x as usize][y as usize] == 0 {
+					if self.board[x as usize][y as usize] == EMPTY {
 						print!(" ");
-					} else if self.board[x as usize][y as usize] == 1 {
+					} else if self.board[x as usize][y as usize] == HEAD {
 						print!("X");
-					} else if self.board[x as usize][y as usize] == 2 {
+					} else if self.board[x as usize][y as usize] == TAIL {
 						print!("O");
-					} else if self.board[x as usize][y as usize] == 3 {
+					} else if self.board[x as usize][y as usize] == APPLE {
 						print!("@");
 					} 
 				}
