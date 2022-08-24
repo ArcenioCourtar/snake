@@ -7,10 +7,10 @@ Terminate game early with `t` followed by `enter`.
 
 use command line arguments before running to change board size and edge behaviour.  
 Formatted like: `[binary] [arg1] [arg2] [arg3]`  
-`arg1 and arg2` are board width and height respectively (min 5, max 25 in either direction)  
+`arg1` and `arg2` are board width and height respectively (min 5, max 25 in either direction)  
 `arg3` lets you change edge behaviour from "wrapping/teleporting" to being lethal "walls" by inserting `Wall`  
 CLA are only read if you submit two or three args after the executable.
-For any argument that cannot be parsed it will revert to the default value (10*10 board with wrapping)
+For any argument that cannot be parsed, or is not within bounds, it will revert to the default value (10*10 board with wrapping)
 
 TODO, roughly by order of importance:
 * functional
