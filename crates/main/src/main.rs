@@ -13,7 +13,8 @@ use ratatui::{
 
 fn main() -> io::Result<()> {
     let mut terminal = ratatui::init();
-    let app_result = App::default().run(&mut terminal);
+    let app_result = App::new();
+    app_result.run(&mut terminal);
     ratatui::restore();
     app_result
 }
@@ -26,16 +27,30 @@ enum CurrentScreen {
 
 
 // tutorial stuff
-#[derive(Debug, Default)]
 pub struct App {
     exit: bool,
+    state: CurrentScreen,
 }
 
 impl App {
-    pub fn run(&mut self, terminal: &mut DefaultTerminal) -> io::Result<()> {
+    pub fn new() -> Self {
+        Self {
+            exit: false,
+            state: CurrentScreen::Main,
+        }
+    }
+        
+    pub fn run(&mut self, terminal: &mut DefaultTerminal) 
+        -> io::Result<()> {
         while !self.exit {
-            terminal.draw(|frame| self.draw(frame))?;
-            self.handle_events()?;
+            match self.state {
+                CurrentScreen::Main => {
+                    terminal.draw(|frame| self.draw(frame))?;
+                    self.handle_events()?;
+                },
+                CurrentScreen::Game => todo!(),
+                CurrentScreen::Options => todo!(),
+            }
         }
         Ok(())
     }
@@ -68,7 +83,7 @@ impl App {
 
 impl Widget for &App {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        let title = Line::from(" Counter App tutorial ".bold());
+        let title = Line::from(" Snake main menu ".bold());
         let instructions = Line::from(vec![
             " Quit ".into(),
             "<Q> ".blue().bold(),
