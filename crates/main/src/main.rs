@@ -8,16 +8,13 @@ use ratatui::{
     symbols::border,
     text::{Line, Text},
     widgets::{Block, Paragraph, Widget},
+    widgets::{List, ListItem, ListState},
     DefaultTerminal, Frame,
 };
 
 fn main() {
     let mut terminal = ratatui::init();
-    let mut app = App::new();
-    match app.run(&mut terminal) {
-        Err(e) => eprintln!("{:?}", e),
-        _ => ()
-    }
+    let app = App::default().run(&mut terminal);
     ratatui::restore();
 }
 
@@ -34,16 +31,26 @@ enum CurrentScreen {
 pub struct App {
     exit: bool,
     state: CurrentScreen,
+    list_state: ListState,
+    list_items: Vec<String>,
 }
 
-impl App {
-    pub fn new() -> Self {
+impl Default for App {
+    fn default() -> Self {
         Self {
             exit: false,
             state: CurrentScreen::Main,
+            list_state: ListState::default(),
+            list_items: vec![
+                "Play game".to_string(),
+                "Options".to_string(),
+                "Exit".to_string(),
+            ],
         }
     }
-        
+}
+
+impl App {
     pub fn run(&mut self, terminal: &mut DefaultTerminal) 
         -> io::Result<()> {
         while !self.exit {
@@ -102,7 +109,6 @@ impl Widget for &App {
             .block(block)
             .render(area, buf);
     }
-
 }
 
 #[cfg(test)]
