@@ -11,15 +11,19 @@ use ratatui::{
     DefaultTerminal, Frame,
 };
 
-fn main() -> io::Result<()> {
+fn main() {
     let mut terminal = ratatui::init();
-    let app_result = App::new();
-    app_result.run(&mut terminal);
+    let mut app = App::new();
+    match app.run(&mut terminal) {
+        Err(e) => eprintln!("{:?}", e),
+        _ => ()
+    }
     ratatui::restore();
-    app_result
 }
 
+#[derive(Default)]
 enum CurrentScreen {
+    #[default]
     Main,
     Game,
     Options,
